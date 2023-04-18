@@ -13,6 +13,10 @@ use App\Http\Controllers\LoginController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::view('/login',"login")->name('login');
 Route::view('/registro',"register")->name('registro');
 //Si es una session activa nos deja entrar si las acredenciales son correctas
