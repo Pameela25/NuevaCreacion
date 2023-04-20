@@ -10,23 +10,26 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller{
     //Registra usuario
-    public function register(Request $request){
-        //validar datos
-
-        $user= new User();
-        $user->name=$request->name;
-        $user->email=$request->email;
-        //contraseñas encriptadas
-        $user->password=Hash::make($request->password);
+    public function register(Request $request)
+    {
+        // Validar datos
+    
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        
         $user->save();
-        
-        //enviar correo de confirmación
-        
-        //Autentificamos por usuario 
+        // Enviar correo de confirmación
+        $user->sendEmailVerificationNotification();
+
+        // Autentificar al usuario
         Auth::login($user);
-        //redirigimos
+    
+        // Redirigir al usuario a la página privada
         return redirect(route('privada'));
     }
+    
     public function login(Request $request){
         //validacion
 
