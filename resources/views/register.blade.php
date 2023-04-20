@@ -8,7 +8,8 @@
 </head>
 <body>
     <main>
-        <form action="{{route('validar-registro')}}" method="post">            @csrf
+        <form action="{{route('validar-registro')}}" method="post">            
+            @csrf
             <div class="input-group mb-3">
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\FormularioController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +26,7 @@ Route::view('/privada',"secret")->middleware('auth')->name('privada');
 //Route::view('/privada',"secret")->name('privada');
 Route::post('/validar-registro',[LoginController::class,'register'])->name('validar-registro');
 Route::post('/inicia-sesion',[LoginController::class,'login'])->name('inicia-sesion');
+
 Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+
+Route::post('/store-data', [FormularioController::class, 'guardarDatos'])->name('store-data');

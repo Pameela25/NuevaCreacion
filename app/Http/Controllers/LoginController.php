@@ -7,6 +7,7 @@ use App\Models\User; //mantiene la informacion
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+
 class LoginController extends Controller{
     //Registra usuario
     public function register(Request $request){
@@ -56,4 +57,6 @@ class LoginController extends Controller{
         $request->session()->regenerateToken();
         return redirect(route('login'));
     }
+    
 }
+
