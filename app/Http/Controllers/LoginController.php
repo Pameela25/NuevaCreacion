@@ -29,7 +29,10 @@ class LoginController extends Controller{
         $user->save();
         
         //enviar correo de confirmación
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
+        //Correo verificado personalizado
+        $user->notify(new VerifyEmail($user));
+
         //Autentificamos por usuario 
         Auth::login($user);
     
