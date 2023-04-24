@@ -11,7 +11,8 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Mail;
 use URL;
-use App\Mail\VerificacionEmail;
+
+
 
 
 class LoginController extends Controller{
@@ -33,7 +34,7 @@ class LoginController extends Controller{
         Auth::login($user);
     
         // Redirigir al usuario a la página privada
-        return redirect(route('privada')->with('status', 'Se ha enviado un enlace de verificación a su correo electrónico.'));
+        return redirect(route('privada'));
     }
     
     public function login(Request $request){
@@ -66,18 +67,7 @@ class LoginController extends Controller{
         $request->session()->regenerateToken();
         return redirect(route('login'));
     }
-     /**Register any authentication / authorization services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            return (new MailMessage)
-                ->subject('Verify Email Address')
-                ->line('Clickea en el boton ...Click the button below to verify your email address.')
-                ->action('Verify Email Address', $url);
-        });
-    }
+
+
 }
 
