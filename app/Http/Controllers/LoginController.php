@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User; //mantiene la informacion
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Mail;
 use URL;
 use App\Mail\VerificacionEmail;
@@ -23,21 +26,10 @@ class LoginController extends Controller{
         $user->password = Hash::make($request->password);
         
         $user->save();
-        /* Generar una URL de verificación de correo electrónico firmada dudara 60 min contiene id de usuario y un hash del correo
-        El hash se utiliza para proteger la integridad de la URL y asegurarse de que no se haya modificado.*/
-        $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            //durante 60 min
-            now()->addMinutes(60),
-            [
-                'id' => $user->id,
-                'hash' => sha1($user->email)
-            ]);
-
-        // Enviar un correo electrónico de verificación
-        Mail::to($user->email)->send(new VerificationEmail($verificationUrl));
-
-        // Autentificar al usuario
+        
+        //enviar correo de confirmación
+        $user->sendEmailVerificationNotification();
+        //Autentificamos por usuario 
         Auth::login($user);
     
         // Redirigir al usuario a la página privada
@@ -74,6 +66,18 @@ class LoginController extends Controller{
         $request->session()->regenerateToken();
         return redirect(route('login'));
     }
-    
+     /**Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Verify Email Address')
+                ->line('Clickea en el boton ...Click the button below to verify your email address.')
+                ->action('Verify Email Address', $url);
+        });
+    }
 }
 
