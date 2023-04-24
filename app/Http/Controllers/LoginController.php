@@ -7,6 +7,9 @@ use App\Models\User; //mantiene la informacion
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
+
 
 class LoginController extends Controller{
     //Registra usuario
@@ -21,7 +24,7 @@ class LoginController extends Controller{
         $user->save();
         
         //enviar correo de confirmación
-        
+        $user->sendEmailVerificationNotification();
         //Autentificamos por usuario 
         Auth::login($user);
         //redirigimos
@@ -57,6 +60,18 @@ class LoginController extends Controller{
         $request->session()->regenerateToken();
         return redirect(route('login'));
     }
-    
+     /**Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage)
+                ->subject('Verify Email Address')
+                ->line('Clickea en el boton ...Click the button below to verify your email address.')
+                ->action('Verify Email Address', $url);
+        });
+    }
 }
 
